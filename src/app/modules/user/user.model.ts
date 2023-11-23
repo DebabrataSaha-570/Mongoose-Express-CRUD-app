@@ -23,7 +23,7 @@ const OrdersSchema = new Schema<Orders>({
 const UserSchema = new Schema<User>({
   userId: { type: Number, required: true },
   username: { type: String, required: true },
-  password: { type: String, required: true, select: false }, //will exclude password form response
+  password: { type: String, required: true, select: false }, //will exclude password form request
   fullName: FullNameSchema,
   age: { type: Number, required: true },
   email: { type: String, required: true },
