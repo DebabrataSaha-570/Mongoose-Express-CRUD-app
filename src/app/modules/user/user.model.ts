@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { Address, FullName, Orders, User } from './user.interface';
 
 //......... User Schema
@@ -20,17 +20,18 @@ const OrdersSchema = new Schema<Orders>({
   quantity: { type: Number, required: true },
 });
 
-export const userSchema = new Schema<User>({
+const UserSchema = new Schema<User>({
   userId: { type: Number, required: true },
-  userName: { type: String, required: true },
-  password: { type: String, required: true },
+  username: { type: String, required: true },
+  password: { type: String, required: true, select: false }, //will exclude password form response
   fullName: FullNameSchema,
   age: { type: Number, required: true },
   email: { type: String, required: true },
   isActive: { type: Boolean, required: true },
   hobbies: [{ type: String, required: true }], //have to confirm this works or not.
-  address: AddressSchema,
+  address: { type: AddressSchema, required: true },
   orders: [OrdersSchema], //have to confirm this works or not
 });
 
 //.............user Model
+export const UserModel = model<User>('User', UserSchema);
