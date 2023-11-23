@@ -7,8 +7,8 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/', (req: Request, res: Response) => {
-  const a = 10;
-  res.send(a);
+  const result = 'Welcome to Mongoose Express CRUD App';
+  res.send(result);
 });
 
 export default app;
