@@ -1,10 +1,26 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
+import userValidationSchema from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const student = req.body;
-    const result = await UserServices.createUserIntoDB(student);
+    const user = req.body;
+
+    //data validation using JOI
+    const { value, error } = userValidationSchema.validate(user);
+
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Something went wrong',
+        error: {
+          code: 404,
+          description: error?.details,
+        },
+      });
+      console.log(error);
+    }
+    const result = await UserServices.createUserIntoDB(value);
 
     //response
     res.status(200).json({
@@ -18,7 +34,7 @@ const createUser = async (req: Request, res: Response) => {
       message: 'Something went wrong',
       error: {
         code: 404,
-        description: 'Something went wrong',
+        description: err,
       },
     });
     console.log(err);

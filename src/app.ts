@@ -11,7 +11,7 @@ app.use(cors());
 app.use('/api', UserRoutes);
 
 app.get('/', (req: Request, res: Response) => {
-  const result = 'Welcome to Mongoose Express CRUD App';
+  const result = 'Welcome to Mongoose Express CRUD App ';
   res.send(result);
 });
 
