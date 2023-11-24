@@ -195,6 +195,35 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const getTotalPriceOfOrders = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.userId;
+    const result = await UserServices.getSingleUserFromDB(id);
+    const usersOrders = result.orders;
+    let totalPrice: number = 0;
+    for (const order of usersOrders) {
+      totalPrice = totalPrice + order.price * order.quantity;
+    }
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Total price calculated successfully!',
+        data: { totalPrice },
+      });
+    }
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'User Not found!',
+      error: {
+        code: 404,
+        description: 'user Not found',
+      },
+    });
+  }
+};
+
 export const UserControllers = {
   createUser,
   getAllUser,
@@ -202,4 +231,5 @@ export const UserControllers = {
   deleteSingleUser,
   updateSingleUser,
   getSingleUserOrders,
+  getTotalPriceOfOrders,
 };

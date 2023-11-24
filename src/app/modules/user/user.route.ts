@@ -10,6 +10,10 @@ router.post('/users', UserControllers.createUser);
 router.get('/users', UserControllers.getAllUser);
 router.get('/users/:userId', UserControllers.getSingleUser);
 router.get('/users/:userId/orders', UserControllers.getSingleUserOrders);
+router.get(
+  '/users/:userId/orders/total-price',
+  UserControllers.getTotalPriceOfOrders,
+);
 
 //update api
 router.put('/users/:userId', UserControllers.updateSingleUser);
