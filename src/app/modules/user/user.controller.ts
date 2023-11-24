@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
 import userValidationSchema from './user.validation';
+import { User, Orders } from './user.interface';
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -68,6 +69,16 @@ const getSingleUser = async (req: Request, res: Response) => {
   try {
     const id = req.params.userId;
     const result = await UserServices.getSingleUserFromDB(id);
+    const {
+      userId,
+      username,
+      fullName,
+      age,
+      email,
+      isActive,
+      hobbies,
+      address,
+    } = result as User;
     if (result === null || undefined) {
       res.status(500).json({
         success: false,
@@ -77,7 +88,16 @@ const getSingleUser = async (req: Request, res: Response) => {
       res.status(200).json({
         success: true,
         message: 'Users fetched Successfully!',
-        data: result,
+        data: {
+          userId,
+          username,
+          fullName,
+          age,
+          email,
+          isActive,
+          hobbies,
+          address,
+        },
       });
     }
   } catch (err) {
@@ -90,6 +110,28 @@ const getSingleUser = async (req: Request, res: Response) => {
       },
     });
     console.log(err);
+  }
+};
+
+const getSingleUserOrders = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.userId;
+    const { orders } = await UserServices.getSingleUserFromDB(id); //have look at his later
+
+    res.status(200).json({
+      success: true,
+      message: 'Users fetched Successfully!',
+      data: { orders },
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'Something went wrong',
+      error: {
+        code: 404,
+        description: 'Something went wrong',
+      },
+    });
   }
 };
 
@@ -159,4 +201,5 @@ export const UserControllers = {
   getSingleUser,
   deleteSingleUser,
   updateSingleUser,
+  getSingleUserOrders,
 };
