@@ -7,7 +7,7 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 
-//application routes
+//users routes
 app.use('/api', UserRoutes);
 
 app.get('/', (req: Request, res: Response) => {

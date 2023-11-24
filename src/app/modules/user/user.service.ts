@@ -27,8 +27,20 @@ const getSingleUserFromDB = async (id: string) => {
     isActive: 1,
     hobbies: 1,
     address: 1,
-  }); //Build In static method.
+  });
 
+  return result;
+};
+
+const updateSingleUserFromDB = async (id: string, updateData: User) => {
+  const filter = { userId: id };
+  const update = updateData;
+
+  const result = await UserModel.findOneAndUpdate(filter, update).select({
+    _id: 0,
+    orders: 0,
+    password: 0,
+  });
   return result;
 };
 
@@ -41,4 +53,5 @@ export const UserServices = {
   getAllUserFromDB,
   getSingleUserFromDB,
   deleteSingleUserFromDB,
+  updateSingleUserFromDB,
 };
