@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
 import userValidationSchema from './user.validation';
-import { User, Orders } from './user.interface';
+import { User } from './user.interface';
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -116,13 +116,17 @@ const getSingleUser = async (req: Request, res: Response) => {
 const getSingleUserOrders = async (req: Request, res: Response) => {
   try {
     const id = req.params.userId;
-    const { orders } = await UserServices.getSingleUserFromDB(id); //have look at his later
+    const result = await UserServices.getSingleUserFromDB(id);
 
-    res.status(200).json({
-      success: true,
-      message: 'Users fetched Successfully!',
-      data: { orders },
-    });
+    if (result && 'orders' in result) {
+      const userOrders = result.orders;
+
+      res.status(200).json({
+        success: true,
+        message: 'Users fetched Successfully!',
+        data: { userOrders },
+      });
+    }
   } catch (error) {
     res.status(404).json({
       success: false,
@@ -199,10 +203,13 @@ const getTotalPriceOfOrders = async (req: Request, res: Response) => {
   try {
     const id = req.params.userId;
     const result = await UserServices.getSingleUserFromDB(id);
-    const usersOrders = result.orders;
+    const usersOrders = result?.orders;
+
     let totalPrice: number = 0;
-    for (const order of usersOrders) {
-      totalPrice = totalPrice + order.price * order.quantity;
+    if (usersOrders) {
+      for (const order of usersOrders) {
+        totalPrice = totalPrice + order.price * order.quantity;
+      }
     }
 
     if (result) {
