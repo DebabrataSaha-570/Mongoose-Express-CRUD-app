@@ -27,11 +27,18 @@ const getSingleUserFromDB = async (id: string) => {
     isActive: 1,
     hobbies: 1,
     address: 1,
-  });
+  }); //Build In static method.
+
+  return result;
+};
+
+const deleteSingleUserFromDB = async (id: string) => {
+  const result = await UserModel.deleteOne({ userId: id });
   return result;
 };
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
   getSingleUserFromDB,
+  deleteSingleUserFromDB,
 };
